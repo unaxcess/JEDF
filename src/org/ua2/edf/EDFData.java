@@ -1,6 +1,7 @@
 package org.ua2.edf;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class EDFData {
     public enum ValueType { STRING, INTEGER, NONE };
@@ -55,6 +56,22 @@ public class EDFData {
     
     public String getName() {
         return name;
+    }
+    
+    public String getString() {
+        if(!type.equals(ValueType.STRING)) {
+            throw new EDFTypeException("Expecting " + ValueType.STRING + " type value, found " + type);
+        }
+        
+        return sValue;
+    }
+    
+    public Integer getInteger() {
+        if(!type.equals(ValueType.INTEGER)) {
+            throw new EDFTypeException("Expecting " + ValueType.INTEGER + " type value, found " + type);
+        }
+        
+        return iValue;
     }
     
     /**
@@ -119,6 +136,23 @@ public class EDFData {
         }
         
         return null;
+    }
+    
+    /**
+     * Convenience method for returning a list of childen of the specified type
+     * @param name
+     * @return
+     */
+    public List<EDFData> getChildren(String name) {
+       List<EDFData> children = new ArrayList<EDFData>();
+       
+       for(EDFData child : children) {
+           if(child.getName().equals(name)) {
+               children.add(child);
+           }
+       }
+       
+       return children;
     }
     
     /**
