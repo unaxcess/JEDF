@@ -1,0 +1,109 @@
+/**
+ * JavaCC file
+ */
+ 
+options {
+  JDK_VERSION = "1.5";
+  LOOKAHEAD = 2;
+  FORCE_LA_CHECK = true;
+  STATIC=false;
+}
+PARSER_BEGIN(EDFParser)
+
+package org.ua2.edf.parser;
+
+import org.ua2.edf.*;
+
+public class EDFParser {
+// This class needs to be defined, even if it contains no methods
+// other than those created by JavaCC
+}
+
+PARSER_END(EDFParser)
+
+SKIP :
+{
+ 	" "
+|	"\r"
+|	"\t"
+|	"\n"
+}
+
+TOKEN :
+{
+    < NAME: ( <LETTER> )+ >
+|   < #LETTER: ["a" - "z"] >
+}
+
+TOKEN :
+{
+	  < OPEN: "<" >
+	| < CLOSE: ">" >
+	| < END: "/" >
+	| < EQUALS: "=" >
+}
+
+TOKEN :
+{
+	< INTEGER: ( "-" )? ( <DIGIT> )+ >
+  | < REAL: ( "-" )? ( <DIGIT> )* ( "." ) ( <DIGIT> )+ ( "e" ( "+" | "-" ) ( <DIGIT> )+ )? >
+  | < #DIGIT: ["0" - "9"] >
+}
+
+TOKEN :
+{
+	< QUOTE: "\"" > : STRLIT
+}
+<STRLIT> TOKEN :
+{
+	< ENDQUOTE: "\"" > : DEFAULT
+}
+<STRLIT> TOKEN :
+{
+	< STRING:	(
+					  (~["\"", "\\"])
+					| ("\\" (
+						  "\\"
+						| "\"" )
+					   )
+				)+ >
+}
+
+public EDFData elementtree() : { EDFData element; EDFData child; }
+{
+  <OPEN> element = elementnameandattr() ( <CLOSE> ( child = elementtree() { element.add(child); } )* <OPEN> )? <END> <CLOSE>   { return element; }
+}
+EDFData elementnameandattr() : { EDFData element; String eName; }
+{
+  eName = elementname()
+  {
+  	element = new EDFData(eName);
+  }
+  	( <EQUALS> ( 
+  		  element.iValue = intelementattr() { element.type = EDFData.ValueType.INTEGER; } 
+  		| element.sValue = stringelementattr() { element.type = EDFData.ValueType.STRING; }
+  		| realelementattr()
+  	) )?
+  {
+  	return element;
+  }
+}
+String elementname() : { Token t; }
+{
+  t = <NAME> 						{ return t.image; }
+}
+int intelementattr() : { Token t; }
+{
+  t = <INTEGER>						{ return new Integer(t.image); }
+}
+String stringelementattr() : { Token t; String s=""; }
+{
+  <QUOTE>
+  ( t = <STRING>	{ s = EDFData.unescape(t.image); } ) ?
+  <ENDQUOTE>						{ return s; }
+}
+// Ignore reals for now
+void realelementattr() : {}
+{
+  <REAL>
+}
