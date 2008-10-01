@@ -3,6 +3,11 @@ package org.ua2.edf;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 
+ * @author brian
+ *
+ */
 public class EDFData {
     public enum ValueType { STRING, INTEGER, NONE };
     
@@ -56,6 +61,16 @@ public class EDFData {
     
     public String getName() {
         return name;
+    }
+    
+    public Object getValue() {
+        if(type.equals(ValueType.STRING)) {
+            return sValue;
+        } else if(type.equals(ValueType.INTEGER)) {
+            return iValue;
+        }
+        
+        return null;
     }
     
     public String getString() {
@@ -144,21 +159,22 @@ public class EDFData {
      * @return
      */
     public List<EDFData> getChildren(String name) {
-       List<EDFData> children = new ArrayList<EDFData>();
+       List<EDFData> childList = new ArrayList<EDFData>();
        
        for(EDFData child : children) {
            if(child.getName().equals(name)) {
-               children.add(child);
+               childList.add(child);
            }
        }
        
-       return children;
+       return childList;
     }
     
     /**
      * Return the EDF object, including children, as a string suitable for passing to the UA server
      * @see java.lang.Object#toString()
      */
+    @Override
     public String toString()
     {
         return format(false);
