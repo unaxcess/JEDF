@@ -133,6 +133,26 @@ public class EDFData {
     }
     
     /**
+     * Convenience method to add a new EDFData child element
+     * 
+     * @param name
+     * @param value
+     */
+    public void addChild(String name, String value) {
+        add(new EDFData(name, value));
+    }
+    
+    /**
+     * Convenience method to add a new EDFData child element
+     * 
+     * @param name
+     * @param value
+     */
+    public void addChild(String name, Integer value) {
+        add(new EDFData(name, value));
+    }
+    
+    /**
      * Gets the first match of a child element
      * @param childname Name of the element
      * @return EDFData object representing the child (and it's children, if any), nor null on no match
@@ -254,7 +274,8 @@ public class EDFData {
             data.append("/>");
         }
         
-        if(pretty) {
+        // Prevent extra carriage return at the end
+        if(pretty && indent.length() > 0) {
             data.append(PRETTY_EOL);
         }
     }
