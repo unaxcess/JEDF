@@ -17,7 +17,7 @@ import org.ua2.clientlib.exception.*;
 /**
  * A UAConnection manages an individual user's connection to the UA server
  * <p>
- * It deals with sendign and recieving EDF, but not session management 
+ * It deals with sending and receiving EDF, but not session management 
  * @author brian
  *
  */
