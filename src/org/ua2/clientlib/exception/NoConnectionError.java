@@ -8,7 +8,7 @@ package org.ua2.clientlib.exception;
  * @author brian
  *
  */
-public class NoConnectionError extends Exception {
+public class NoConnectionError extends UAException {
 	/**
 	 * An enumerated list of reasons why a user is not connected to UA
 	 * @author brian
