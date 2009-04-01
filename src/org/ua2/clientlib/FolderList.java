@@ -39,6 +39,7 @@ public class FolderList
 		EDFData request = new EDFData("request", "folder_list");
 		EDFData reply = ua.sendAndRead(request);
 
+		// TODO - handle errors (eg, <reply="rq_invalid">)
 		for(EDFData folderdata : reply.getChildren("folder"))
 		{
 			Folder folder = new Folder(folderdata);
