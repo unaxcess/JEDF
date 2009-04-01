@@ -23,7 +23,9 @@ public class Folder {
 
 	/**
 	 * Creates a folder from an EDFData
-	 * @param edftree
+	 * @param edftree EDFData tree representing a folder
+	 * @throws WrongEDFException the EDFData tree didn't contain the correct information to describe a folder
+
 	 */
 	public Folder(EDFData edftree) throws WrongEDFException
 	{
