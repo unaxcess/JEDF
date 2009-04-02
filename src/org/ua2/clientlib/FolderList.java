@@ -18,15 +18,41 @@ import java.util.concurrent.ConcurrentHashMap;
 public class FolderList
 {
 	private ConcurrentHashMap<String, Folder> folders = new ConcurrentHashMap<String, Folder>();
-	private UAConnection ua;
+	private UA ua;
 	
 	/**
-	 * Creates a new FolderList
-	 * @param uaconnection	a connection to UA
+	 * Creates a FolderList with its UA instance set to the single static instance, if there is one, or not set
 	 */
-	public FolderList(UAConnection uaconnection)
+	public FolderList()
 	{
-		ua = uaconnection;
+		if(UA.singleInstance())
+		{
+			ua = UA.getInstance();
+		}
+	}
+	/**
+	 * Creates a new FolderList
+	 * @param ua	an instance of UA
+	 */
+	public FolderList(UA instance)
+	{
+		setUAInstance(instance);
+	}
+	
+	/**
+	 * Set this FolderList's UA instance, if not set
+	 * @param instance	an instance of UA
+	 */
+	public void setUAInstance(UA instance)
+	{
+		if(ua == null)
+		{
+			ua = instance;
+		}
+		else
+		{
+			throw new Error("Can't set an object's UA instance more than once");
+		}
 	}
 	
 	/**
@@ -36,8 +62,10 @@ public class FolderList
 	{
 		ConcurrentHashMap<String, Folder> newfolders = new ConcurrentHashMap<String, Folder>();
 		
+		UAConnection connection = (UAConnection) ua.get(UAConnection.class);
+		
 		EDFData request = new EDFData("request", "folder_list");
-		EDFData reply = ua.sendAndRead(request);
+		EDFData reply = connection.sendAndRead(request);
 
 		// TODO - handle errors (eg, <reply="rq_invalid">)
 		for(EDFData folderdata : reply.getChildren("folder"))

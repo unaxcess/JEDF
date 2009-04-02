@@ -19,19 +19,42 @@ public class UASession
 	
 	SessionStatus sessionstatus = SessionStatus.NOTCONNECTED;
 	
-	private UAConnection connection;
+	private UA ua;
 	
-
-	public UAConnection getConnection()
+	/**
+	 * Create a new UASession, with the UA object set by the single static instance
+	 */
+	public UASession()
 	{
-		return connection;
+		if(UA.singleInstance())
+		{
+			ua = UA.getInstance();
+		}
+		else
+		{
+			throw new Error("UASession() cannot be constructed in multiple instance mode");
+		}
 	}
-	
+
+	/**
+	 * Create a new UASession, with the UA object supplied
+	 * @param instance UA object for this session
+	 */
+	public UASession(UA instance)
+	{
+		ua = instance;
+	}
+
+		
 	public void connect(String host, int port)
 	{
 		try
 		{
-			connection = new UAConnection();
+			UAConnection connection = new UAConnection();
+			
+			// Register the UA connection
+			ua.register(connection);
+			
 			connection.connect(host, port);
 			
 			sessionstatus = SessionStatus.CONNECTED;
@@ -61,7 +84,9 @@ public class UASession
 		
 		EDFData sendData;
 		EDFData readData;
-				
+		
+		UAConnection connection = (UAConnection) ua.get(UAConnection.class);
+					
 		sendData = new EDFData("request", "user_login");
 		sendData.addChild("name", username);
 		sendData.addChild("password", password);
@@ -95,6 +120,7 @@ public class UASession
 		// FIXME - handle logouts better?
 		EDFData readData;
 
+		UAConnection connection = (UAConnection) ua.get(UAConnection.class);
 		readData = connection.sendAndRead(new EDFData("request", "user_logout"));
 	}
 
@@ -110,6 +136,8 @@ public class UASession
 		// FIXME - this is not the best place for this method
 
 		System.out.println("Request for login banner");
+
+		UAConnection connection = (UAConnection) ua.get(UAConnection.class);
 		
 		String banner = "No banner";
 		

@@ -17,17 +17,42 @@ import java.util.concurrent.ConcurrentHashMap;
 public class UserList
 {
 	private ConcurrentHashMap<String, User> users = new ConcurrentHashMap<String, User>();
-	private UAConnection ua;
+	private UA ua;
 	
 	/**
-	 * Creates a new UserList
-	 * @param uaconnection	a connection to UA
+	 * Creates a UserList with its UA instance set to the single static instance, if there is one, or not set
 	 */
-	public UserList(UAConnection uaconnection)
+	public UserList()
 	{
-		ua = uaconnection;
+		if(UA.singleInstance())
+		{
+			ua = UA.getInstance();
+		}
+	}
+	/**
+	 * Creates a new UserList
+	 * @param ua	an instance of UA
+	 */
+	public UserList(UA instance)
+	{
+		setUAInstance(instance);
 	}
 	
+	/**
+	 * Set this UserList's UA instance, if not set
+	 * @param instance	an instance of UA
+	 */
+	public void setUAInstance(UA instance)
+	{
+		if(ua == null)
+		{
+			ua = instance;
+		}
+		else
+		{
+			throw new Error("Can't set an object's UA instance more than once");
+		}
+	}	
 	/**
 	 * Refresh the list of users
 	 */
@@ -35,8 +60,10 @@ public class UserList
 	{
 		ConcurrentHashMap<String, User> newusers = new ConcurrentHashMap<String, User>();
 		
+		UAConnection connection = (UAConnection) ua.get(UAConnection.class);
+		
 		EDFData request = new EDFData("request", "user_list");
-		EDFData reply = ua.sendAndRead(request);
+		EDFData reply = connection.sendAndRead(request);
 
 		// TODO - handle errors (eg, <reply="rq_invalid">)
 		for(EDFData userdata : reply.getChildren("user"))
