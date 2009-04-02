@@ -33,16 +33,16 @@ public class Message
 	}
 	
 	public MessageType type = MessageType.NONE;
-	public int toid = 0;	// User id of To: user, if relevant
-	public String to;		// Text string for To: user
-	public int fromid = 0;	// User id of From: user, if relevant
-	public String from;		// Text string for From: user
+	public int toid = -1;		// User id of To: user, if relevant
+	public String to;			// Text string for To: user
+	public int fromid = -1;		// User id of From: user, if relevant
+	public String from;			// Text string for From: user
 	public String subject;
 	public String body;
-	public int folderid = 0;// Folder ID, if relevant
-	public int date = 0;	// POSIX date
-	public int id = 0;		// Message ID, if relevant
-	public int inreplyto=0;	// Message this is a reply to, if relevant
+	public int folderid = -1;	// Folder ID, if relevant
+	public int date = -1;		// POSIX date
+	public int id = -1;			// Message ID, if relevant
+	public int inreplyto=  -1;	// Message this is a reply to, if relevant
 	// FIXME - posts can have multiple parent posts, including some which are no longer available
 	// FIXME - no support for attachments/annotations
 	// FIXME - deleted posts are visible to admins
@@ -150,7 +150,7 @@ public class Message
 		post.addChild("subject", subject);
 		post.addChild("text", body);
 		
-		if(toid != 0)
+		if(toid != -1)
 		{
 			post.addChild("toid", toid);
 		}

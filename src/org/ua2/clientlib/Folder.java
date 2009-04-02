@@ -8,7 +8,7 @@ import org.ua2.edf.*;
 
 public class Folder {
 	public String name;
-	public int id;
+	public int id = -1;
 	public int unread = 0;
 
 	private ArrayList<Integer> editors = new ArrayList<Integer>();			// User ID of editor
