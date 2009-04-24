@@ -169,4 +169,52 @@ public class Message
 			return Reason.POST_NOFOLDER;
 		}
 	}
+	
+	public Reason page() throws MessageInvalidOperation, NoConnectionError
+	{
+		switch(type)
+		{
+			case NONE:	// Assume this message is pageable
+				type = MessageType.PAGE;
+				break;
+			case POST:	// This is ok
+				type = MessageType.PAGE;
+				break;
+			case PAGE:	// This is ok
+				break;
+			default:	// Can't page this message type
+				throw new MessageInvalidOperation("Can't page message type");
+		}
+		
+		// TODO - check data
+		// TODO - recipient username/id validity
+		// TODO - subject line
+		
+		EDFData page = new EDFData("request", "user_contact");
+
+		page.addChild("toid", toid);
+		page.addChild("text", body);
+		
+		EDFData reply = ua.sendAndRead(page);
+		
+		if(reply.sValue.equals("user_contact"))
+		{
+			return Reason.OK;
+		}
+		
+		if(reply.sValue.equals("user_busy"))
+		{
+			return Reason.PAGE_BUSY;
+		}
+		
+		if(reply.sValue.equals("user_not_on"))
+		{
+			return Reason.PAGE_UNAVAIL;
+		}
+		
+		// FIXME - handle other problems too
+		// TODO - server returns <reply="rq_invalid><request="message_add"/><scope=3/></reply> if not logged in
+		
+		throw new Error("Unhandled problem in user_page");
+	}
 }
