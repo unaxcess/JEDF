@@ -146,13 +146,13 @@ public class Message
 		
 		// TODO - to, toid
 		EDFData post = new EDFData("request", "message_add");
-		post.addChild("folderid", folderid);
-		post.addChild("subject", subject);
-		post.addChild("text", body);
+		post.add("folderid", folderid);
+		post.add("subject", subject);
+		post.add("text", body);
 		
 		if(toid != -1)
 		{
-			post.addChild("toid", toid);
+			post.add("toid", toid);
 		}
 		
 		EDFData reply = ua.sendAndRead(post);
@@ -192,8 +192,8 @@ public class Message
 		
 		EDFData page = new EDFData("request", "user_contact");
 
-		page.addChild("toid", toid);
-		page.addChild("text", body);
+		page.add("toid", toid);
+		page.add("text", body);
 		
 		EDFData reply = ua.sendAndRead(page);
 		

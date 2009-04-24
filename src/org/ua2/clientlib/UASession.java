@@ -88,10 +88,10 @@ public class UASession
 		UAConnection connection = (UAConnection) ua.get(UAConnection.class);
 					
 		sendData = new EDFData("request", "user_login");
-		sendData.addChild("name", username);
-		sendData.addChild("password", password);
-		sendData.addChild("client", "JEDF 0.1-dev");
-		sendData.addChild("protocol", "2.6-beta17");
+		sendData.add("name", username);
+		sendData.add("password", password);
+		sendData.add("client", "JEDF 0.1-dev");
+		sendData.add("protocol", "2.6-beta17");
 
 		readData = connection.sendAndRead(sendData);
 		

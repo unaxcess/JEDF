@@ -138,7 +138,7 @@ public class EDFData {
      * @param name
      * @param value
      */
-    public void addChild(String name, String value) {
+    public void add(String name, String value) {
         add(new EDFData(name, value));
     }
     
@@ -148,7 +148,7 @@ public class EDFData {
      * @param name
      * @param value
      */
-    public void addChild(String name, Integer value) {
+    public void add(String name, Integer value) {
         add(new EDFData(name, value));
     }
     
