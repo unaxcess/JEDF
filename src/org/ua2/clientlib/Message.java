@@ -212,6 +212,12 @@ public class Message
 			return Reason.PAGE_UNAVAIL;
 		}
 		
+		if(reply.sValue.equals("user_not_exist"))
+		{
+			return Reason.NOSUCHRECIPIENT;
+		}
+
+		
 		// FIXME - handle other problems too
 		// TODO - server returns <reply="rq_invalid><request="message_add"/><scope=3/></reply> if not logged in
 		
