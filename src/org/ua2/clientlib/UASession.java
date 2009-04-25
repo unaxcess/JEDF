@@ -21,6 +21,8 @@ public class UASession
 	
 	private UA ua;
 	
+	private String clientname = "JEDF 0.1-dev";
+	
 	/**
 	 * Create a new UASession, with the UA object set by the single static instance
 	 */
@@ -71,6 +73,15 @@ public class UASession
 	}
 	
 	/**
+	 * Set the client name to specified value. Where not set, it defaults to "JEDF-<version>"
+	 * @param name	Client name.
+	 */
+	public void setClientName(String name)
+	{
+		clientname = name;
+	}
+	
+	/**
 	 * Logs in to the server
 	 * 
 	 * @param username	User's username
@@ -90,7 +101,7 @@ public class UASession
 		sendData = new EDFData("request", "user_login");
 		sendData.add("name", username);
 		sendData.add("password", password);
-		sendData.add("client", "JEDF 0.1-dev");
+		sendData.add("client", clientname);
 		sendData.add("protocol", "2.6-beta17");
 
 		readData = connection.sendAndRead(sendData);
