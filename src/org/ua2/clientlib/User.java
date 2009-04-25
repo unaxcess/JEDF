@@ -1,5 +1,6 @@
 package org.ua2.clientlib;
 
+import org.ua2.clientlib.exception.NoConnectionError;
 import org.ua2.clientlib.exception.WrongEDFException;
 import org.ua2.edf.EDFData;
 
@@ -17,13 +18,19 @@ public class User
 	public int accesslevel = -1;	// Access level
 	public String accessname;		// Access name (null for the accesslevel default)
 	// TODO - other data
+	
+	private UA ua;
 		
 
 	/**
 	 * Construct a blank User object
 	 */
 	public User()
-	{		
+	{
+		if(UA.singleInstance())
+		{
+			ua = UA.getInstance();
+		}
 	}
 
 	/**
@@ -32,6 +39,69 @@ public class User
 	 * @throws WrongEDFException the EDFData tree didn't contain the correct information to describe a user
 	 */
 	public User(EDFData edf) throws WrongEDFException
+	{
+		this();
+		
+		populateUser(edf);
+	}
+	
+	/**
+	 * Creates a User object for the user specified, or a blank object if the user doesn't exist
+	 * @param name	Name of the user
+	 * @throws NoConnectionError	Not connected to UA
+	 * @throws WrongEDFException	Got some sort of error from the server
+	 */
+	public User(String name) throws NoConnectionError, WrongEDFException
+	{
+		this();
+		
+		EDFData user = getUser(name);
+		
+		if(user != null)
+		{
+			populateUser(user);
+		}
+	}
+	
+	/**
+	 * Creates a User object for the user specified, or a blank object if the user doesn't exist
+	 * @param name	Name of the user
+	 * @param instance	UA object for this UA session
+	 * @throws NoConnectionError	Not connected to UA
+	 * @throws WrongEDFException	Got some sort of error from the server
+	 */
+	public User(String name, UA instance) throws NoConnectionError, WrongEDFException
+	{
+		this();
+		
+		setUAInstance(instance);
+		
+		EDFData user = getUser(name);
+		
+		if(user != null)
+		{
+			populateUser(user);
+		}
+	}
+
+	private EDFData getUser(String name) throws NoConnectionError
+	{
+		EDFData request = new EDFData("request", "user_list");
+		request.add("name", name);
+		
+		UAConnection uacon = (UAConnection) ua.get(UAConnection.class);
+		
+		EDFData reply = uacon.sendAndRead(request);
+		
+		// TODO - handle fail replies
+		
+		EDFData user = reply.getChild("user");
+		
+		return user;	// Return null if no user
+	}
+	
+	
+	private void populateUser(EDFData edf) throws WrongEDFException
 	{
 		// Check the root element
 		if((! edf.name.equalsIgnoreCase("user")) || (edf.type != EDFData.ValueType.INTEGER))
@@ -75,4 +145,20 @@ public class User
 			throw new WrongEDFException("<user> is missing a required element");
 		}
 	}
+	
+	/**
+	 * Set this User's UA instance, if not set
+	 * @param instance	an instance of UA
+	 */
+	public void setUAInstance(UA instance)
+	{
+		if(ua == null)
+		{
+			ua = instance;
+		}
+		else
+		{
+			throw new Error("Can't set an object's UA instance more than once");
+		}
+	}	
 }
