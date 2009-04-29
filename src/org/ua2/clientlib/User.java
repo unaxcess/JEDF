@@ -147,6 +147,15 @@ public class User
 	}
 	
 	/**
+	 * Does this object represent a valid user?
+	 * @return true if the object is a user, false if it's a blank
+	 */
+	public boolean isUser()
+	{
+		return (id != -1);
+	}
+	
+	/**
 	 * Set this User's UA instance, if not set
 	 * @param instance	an instance of UA
 	 */
