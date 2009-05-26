@@ -67,7 +67,7 @@ public class UA
 	}
 	
 	/**
-	 * Retreive a registered object by its class
+	 * Retrieve a registered object by its class
 	 * @param class
 	 * @return the object, or null if the class isn't registered
 	 */
