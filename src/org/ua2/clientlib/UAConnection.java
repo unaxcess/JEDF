@@ -1,18 +1,15 @@
 package org.ua2.clientlib;
 
-import java.io.InputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.io.IOException;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.TimeUnit;
 
-import org.ua2.edf.*;
-import org.ua2.edf.parser.*;
-
-import org.ua2.clientlib.exception.*;
+import org.ua2.clientlib.exception.NoConnectionError;
+import org.ua2.edf.EDFData;
+import org.ua2.edf.parser.EDFParser;
 
 /**
  * A UAConnection manages an individual user's connection to the UA server
