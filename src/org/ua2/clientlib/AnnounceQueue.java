@@ -2,7 +2,6 @@ package org.ua2.clientlib;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 import org.ua2.edf.EDFData;
 
