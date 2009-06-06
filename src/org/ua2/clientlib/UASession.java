@@ -1,12 +1,7 @@
 package org.ua2.clientlib;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
-
-import org.ua2.edf.*;
-import org.ua2.clientlib.*;
-import org.ua2.clientlib.exception.*;
+import org.ua2.clientlib.exception.NoConnectionError;
+import org.ua2.edf.EDFData;
 
 /**
  * UASession manages a user's UAConnection and session, including logging in and out 
@@ -128,11 +123,8 @@ public class UASession
 	 */
 	public void logout() throws NoConnectionError
 	{
-		// FIXME - handle logouts better?
-		EDFData readData;
-
 		UAConnection connection = (UAConnection) ua.get(UAConnection.class);
-		readData = connection.sendAndRead(new EDFData("request", "user_logout"));
+		connection.sendAndRead(new EDFData("request", "user_logout"));
 	}
 
 	
