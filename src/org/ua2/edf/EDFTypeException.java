@@ -7,7 +7,12 @@ package org.ua2.edf;
  *
  */
 public class EDFTypeException extends RuntimeException {
-    public EDFTypeException(String msg) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public EDFTypeException(String msg) {
         super(msg);
     }
 }
