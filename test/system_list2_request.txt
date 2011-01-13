@@ -1,0 +1,50 @@
+<reply="system_list">
+  <name="UNaXcess"/>
+  <version="2.7-beta13"/>
+  <protocol="2.7-beta13"/>
+  <buildnum=129/>
+  <builddate="22/11/2010"/>
+  <buildtime="22:07"/>
+  <banner=" _   _   _    ____
+| | | | / \\  |___ \\
+| | | |/ _ \\   __) |
+| |_| / ___ \\ / __/
+ \\___/_/   \\_\\_____|
+
+
+    .-'\"'-.
+   / #     \\     
+  : #       :  .-'\"'-.
+   \\       /  / #     \\
+    \\     /  : #       :     Happy Belated
+jgs  `'q'`    \\       /       Birthday
+       (       \\     /       Alluveai!
+        )       `'p'`
+       (          )
+        )        (
+                  )"/>
+  <newuser="You are requested to give your full name (not just initials) and email address. This information will only be seen by the system administrators. Once the information you give has been checked over, you will gain full user status.
+
+You can choose to be known by whatever name you like on UNaXcess. Most users like to use a name that is short and imaginative. Please don't select a name which might cause offence to people!
+
+Any personal information you give will be stored and we will keep everything confidential.
+
+If you are not happy about this, don't register!"/>
+  <systemtime=1290643076/>
+  <uptime=1290465317/>
+  <expire=1209600/>
+  <numusers=1155/>
+  <maxuserid=2371/>
+  <totalstats>
+    <numlogins=549795/>
+    <totallogins=9.31082e+09/>
+    <averagelogin=16935.1/>
+    <nummsgs=2.07069e+06/>
+    <totalmsgs=3.32529e+08/>
+    <averagemsg=160.588/>
+  </totalstats>
+  <numfolders=150/>
+  <maxfoldermsgid=2003392/>
+  <numchannels=3/>
+  <maxtalkmsgid=3/>
+</reply>

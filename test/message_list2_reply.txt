@@ -1,0 +1,61 @@
+<reply="message_list">
+  <message=2002995>
+    <date=1290543795/>
+    <fromid=626/>
+    <toid=2013/>
+    <text="Or how about just displaying the fact that the message has been edited, like
+most bulletin board software does? If it means that much to you, store the
+original message and allow people to view the original through some magic key
+sequence or something. Annotations are a piss-poor implementation of message
+editing, and there's no reason it shouldn't be done properly. If people take
+advantage of it and start being dicks, then people will just killfile them or
+ignore their messages and not post replies.
+
+What we don't need is some half-arsed new thing which doesn't have a full set
+of features, but was created due to one person's view on the world (no
+offence, techno). If you're going to do this, at least take into account other
+people's wishes, or else this is just going to fragment and die because of it."/>
+    <replyto=2002990>
+      <read=1/>
+      <fromid=2013/>
+      <fromname="rjp"/>
+    </replyto>
+    <replyto=2002989>
+      <read=1/>
+      <fromid=626/>
+      <fromname="insanity"/>
+    </replyto>
+    <subject="UA3 Feature Request"/>
+    <attachment=1>
+      <content-type="text/x-ua-annotation"/>
+      <text="No offence to techno, because that's what UA2 is! :-)"/>
+      <fromid=626/>
+      <date=1290543813/>
+      <fromname="insanity"/>
+    </attachment>
+    <edit=1290543813>
+      <userid=626/>
+      <username="insanity"/>
+    </edit>
+    <fromname="insanity"/>
+    <toname="rjp"/>
+    <read=1/>
+    <replyby=2002996>
+      <read=1/>
+      <fromid=2013/>
+      <fromname="rjp"/>
+    </replyby>
+    <replyby=2002999>
+      <read=1/>
+      <fromid=325/>
+      <fromname="jason"/>
+    </replyby>
+    <numreplies=14/>
+    <msgpos=69/>
+  </message>
+  <searchtype=0/>
+  <folderid=36566/>
+  <foldername="UA-Dev"/>
+  <nummsgs=94/>
+  <totalmsgs=17357/>
+</reply>

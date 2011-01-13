@@ -1,0 +1,3 @@
+<reply="bulletin_list">
+  <searchtype=0/>
+</reply>

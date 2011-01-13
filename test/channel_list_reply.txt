@@ -1,0 +1,24 @@
+<reply="channel_list">
+  <channel=1>
+    <name="Talk"/>
+    <accessmode=3/>
+    <nummsgs=0/>
+    <totalmsgs=0/>
+    <created=1290465321/>
+  </channel>
+  <channel=2>
+    <name="Whisper"/>
+    <accessmode=48/>
+    <nummsgs=0/>
+    <totalmsgs=0/>
+    <created=1290465321/>
+  </channel>
+  <channel=3>
+    <name="Debate"/>
+    <accessmode=49/>
+    <nummsgs=0/>
+    <totalmsgs=0/>
+    <created=1290465321/>
+  </channel>
+  <numchannels=3/>
+</reply>

@@ -1,0 +1,3 @@
+<request="channel_list">
+  <searchtype=3/>
+</request>

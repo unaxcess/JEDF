@@ -1,0 +1,13 @@
+<announce="user_login">
+  <userid=2/>
+  <username="Crackpot"/>
+  <status=1/>
+  <timeoff=1290643049/>
+  <timeon=1290643286/>
+  <requests=1/>
+  <location="Vodafone 3G"/>
+  <address="212.183.140.9"/>
+  <client="APUALinG v0.1"/>
+  <protocol="2.6-beta17"/>
+  <announcetime=1290643286/>
+</announce>
