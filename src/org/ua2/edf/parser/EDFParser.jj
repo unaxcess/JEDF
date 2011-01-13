@@ -31,8 +31,9 @@ SKIP :
 
 TOKEN :
 {
-    < NAME: ( <LETTER> )+ >
+    < NAME: ( <LETTER> ) ( <LETTER> | <DIGIT> | "-" )* >
 |   < #LETTER: ["a" - "z"] >
+|   < #DIGIT: ["0" - "9"] >
 }
 
 TOKEN :
@@ -71,7 +72,7 @@ TOKEN :
 
 public EDFData elementtree() : { EDFData element; EDFData child; }
 {
-  <OPEN> element = elementnameandattr() ( <CLOSE> ( child = elementtree() { element.add(child); } )* <OPEN> )? <END> <CLOSE>   { return element; }
+  <OPEN> element = elementnameandattr() ( <CLOSE> ( child = elementtree() { element.add(child); } )* <OPEN> )? <END> ( <NAME> )? <CLOSE>   { return element; }
 }
 EDFData elementnameandattr() : { EDFData element; String eName; }
 {
