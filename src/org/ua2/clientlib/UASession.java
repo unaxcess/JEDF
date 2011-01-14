@@ -1,5 +1,8 @@
 package org.ua2.clientlib;
 
+import java.net.InetAddress;
+
+import org.apache.log4j.Logger;
 import org.ua2.clientlib.exception.NoConnectionError;
 import org.ua2.edf.EDFData;
 
@@ -16,7 +19,12 @@ public class UASession
 	
 	private UA ua;
 	
-	private String clientname = "JEDF 0.1-dev";
+	private String clientname = "JEDF 0.2-dev";
+	private String version = "2.6-beta17";
+
+	private EDFData user = null;
+
+	private static final Logger logger = Logger.getLogger(UASession.class);
 	
 	/**
 	 * Create a new UASession, with the UA object set by the single static instance
@@ -57,7 +65,7 @@ public class UASession
 			sessionstatus = SessionStatus.CONNECTED;
 			
 			// FIXME - debug code
-			System.out.println("Connected");
+			logger.debug("Connected");
 		}
 		catch (Exception e)
 		{
@@ -73,37 +81,63 @@ public class UASession
 	 */
 	public void setClientName(String name)
 	{
-		clientname = name;
+		this.clientname = name;
 	}
+	
+	public void setClientProtocol(String version) {
+		this.version = version;
+	}
+	
+	public EDFData sendAndRead(EDFData sendData) throws NoConnectionError {
+		UAConnection connection = (UAConnection) ua.get(UAConnection.class);
+		return connection.sendAndRead(sendData);
+	}
+	
+	public int getUserId() {
+		if(user == null) {
+			return -1;
+		}
+		
+		return user.getChild("userid").getInteger();
+	}
+	
+	public boolean login(String username, String password) throws NoConnectionError {
+		return login(username, password, null, false);
+	}
+	
 	
 	/**
 	 * Logs in to the server
 	 * 
 	 * @param username	User's username
 	 * @param password	User's plain-text password
+	 * @param address 
 	 * @return	true if users is successfully logged in, false otherwise
 	 * @throws NoConnectionError	Connection to UA server has been lost or is otherwise unavailable
 	 */
-	public boolean login(String username, String password) throws NoConnectionError
+	public boolean login(String username, String password, InetAddress address, boolean shadow) throws NoConnectionError
 	{
 		// FIXME - need to handle multiple login attempts
 		
-		EDFData sendData;
-		EDFData readData;
-		
-		UAConnection connection = (UAConnection) ua.get(UAConnection.class);
-					
-		sendData = new EDFData("request", "user_login");
+		EDFData sendData = new EDFData("request", "user_login");
 		sendData.add("name", username);
 		sendData.add("password", password);
 		sendData.add("client", clientname);
-		sendData.add("protocol", "2.6-beta17");
-
-		readData = connection.sendAndRead(sendData);
+		sendData.add("protocol", version);
+		if(address != null) {
+			sendData.add("hostname", address.getHostAddress());
+			sendData.add("address", address.getHostAddress());
+		}
+		if(shadow) {
+			sendData.add("status", 256);
+		}
+		
+		EDFData readData = sendAndRead(sendData);
 		
 		if(readData.sValue.equals("user_login"))
 		{
 			// Login successful
+			user  = readData;
 			
 			sessionstatus = SessionStatus.LOGGEDIN;
 			
@@ -123,8 +157,7 @@ public class UASession
 	 */
 	public void logout() throws NoConnectionError
 	{
-		UAConnection connection = (UAConnection) ua.get(UAConnection.class);
-		connection.sendAndRead(new EDFData("request", "user_logout"));
+		sendAndRead(new EDFData("request", "user_logout"));
 	}
 
 	
@@ -138,27 +171,23 @@ public class UASession
 	{
 		// FIXME - this is not the best place for this method
 
-		System.out.println("Request for login banner");
+		logger.debug("Request for login banner");
 
-		UAConnection connection = (UAConnection) ua.get(UAConnection.class);
-		
 		String banner = "No banner";
 		
 		try
 		{
-			EDFData bannerresponse = connection.sendAndRead(new EDFData("request", "system_list"));
-			System.out.println("Status: " + connection.statusmessage);
+			EDFData bannerresponse = sendAndRead(new EDFData("request", "system_list"));
 
 			banner = bannerresponse.getChild("banner").sValue;
 		}
 		catch(Exception e)
 		{
-			System.out.println(e.toString());
+			logger.error("Cannot get banner", e);
 		}
 		
-		System.out.println("Returning banner");
+		logger.debug("Returning banner");
 		
 		return banner;
 	}
-	
 }
