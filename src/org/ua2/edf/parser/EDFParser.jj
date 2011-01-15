@@ -48,7 +48,7 @@ TOKEN :
 {
 	< INTEGER: ( "-" )? ( <DIGIT> )+ >
   | < REAL: ( "-" )? ( <DIGIT> )* ( "." ) ( <DIGIT> )+ ( "e" ( "+" | "-" ) ( <DIGIT> )+ )? >
-  | < #DIGIT: ["0" - "9"] >
+  | < DIGIT >
 }
 
 TOKEN :
