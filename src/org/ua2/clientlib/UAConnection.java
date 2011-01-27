@@ -215,6 +215,11 @@ public class UAConnection implements Runnable {
 		closeConnection();
 	}
 
+	void disconnect() {
+		setStatus(ConnectionStatus.NOTCONNECTED, "Disconnected");
+		closeConnection();
+	}
+
 	/**
 	 * Reads an EDFData object from the server
 	 * 

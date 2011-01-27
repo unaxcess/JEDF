@@ -157,7 +157,12 @@ public class UASession
 	 */
 	public void logout() throws NoConnectionError
 	{
-		sendAndRead(new EDFData("request", "user_logout"));
+		if(sessionstatus == SessionStatus.LOGGEDIN) {
+			sendAndRead(new EDFData("request", "user_logout"));
+		} else {
+			UAConnection connection = (UAConnection) ua.get(UAConnection.class);
+			connection.disconnect();
+		}
 	}
 
 	
