@@ -7,7 +7,9 @@ options {
   LOOKAHEAD = 2;
   FORCE_LA_CHECK = true;
   STATIC=false;
+  UNICODE_INPUT = true;
 }
+
 PARSER_BEGIN(EDFParser)
 
 package org.ua2.edf.parser;
@@ -23,17 +25,17 @@ PARSER_END(EDFParser)
 
 SKIP :
 {
- 	" "
-|	"\r"
-|	"\t"
-|	"\n"
+ 	  " "
+	| "\r"
+	| "\t"
+	| "\n"
 }
 
 TOKEN :
 {
-    < NAME: ( <LETTER> ) ( <LETTER> | <DIGIT> | "-" )* >
-|   < #LETTER: ["a" - "z"] >
-|   < #DIGIT: ["0" - "9"] >
+      < NAME: ( <LETTER> ) ( <LETTER> | <DIGIT> | "-" )* >
+	| < #LETTER: ["a" - "z" , "A" - "Z" ] >
+	| < #DIGIT: ["0" - "9"] >
 }
 
 TOKEN :
@@ -46,65 +48,100 @@ TOKEN :
 
 TOKEN :
 {
-	< INTEGER: ( "-" )? ( <DIGIT> )+ >
-  | < REAL: ( "-" )? ( <DIGIT> )* ( "." ) ( <DIGIT> )+ ( "e" ( "+" | "-" ) ( <DIGIT> )+ )? >
-  | < DIGIT >
+	  < INTEGER: ( "-" )? ( <DIGIT> )+ >
+	| < REAL: ( "-" )? ( <DIGIT> )* ( "." ) ( <DIGIT> )+ ( "e" ( "+" | "-" ) ( <DIGIT> )+ )? >
 }
 
 TOKEN :
 {
-	< QUOTE: "\"" > : STRLIT
+	  < QUOTE: "\"" > : STRLIT
 }
+
 <STRLIT> TOKEN :
 {
 	< ENDQUOTE: "\"" > : DEFAULT
 }
+
 <STRLIT> TOKEN :
 {
-	< STRING:	(
-					  (~["\"", "\\"])
-					| ("\\" (
-						  "\\"
-						| "\"" )
-					   )
-				)+ >
+	< STRING: (
+		  ( ~["\"" , "\\"] )
+		| ( "\\" ( "\\" | "\"" ) )
+	)+ >
 }
 
 public EDFData elementtree() : { EDFData element; EDFData child; }
 {
-  <OPEN> element = elementnameandattr() ( <CLOSE> ( child = elementtree() { element.add(child); } )* <OPEN> )? <END> ( <NAME> )? <CLOSE>   { return element; }
+	  // Normal cases <name=value/> or <name>[children]</> etc
+	  <OPEN> element = elementnameandattr() ( <CLOSE> ( child = elementtree() { element.add(child); } )* <OPEN> )? <END> ( <NAME> )? <CLOSE>   { return element; }
+
+	  // Obscure cases <=value/> or <=value>[children]</> etc
+	| <OPEN> <EQUALS> element = elementattr() ( <CLOSE > <OPEN> )? <END> <CLOSE > { return element; }
+
+	  // Obscure case <>[children]</>
+	| <OPEN> <CLOSE> { element = new EDFData(""); } ( child = elementtree() { element.add(child); } )* <OPEN> <END> <CLOSE > { return element; }
+
 }
+
+EDFData elementattr() : { EDFData element = new EDFData(""); }
+{
+	(
+		  element.iValue = intelementattr() { element.type = EDFData.ValueType.INTEGER; } 
+		| element.sValue = stringelementattr() { element.type = EDFData.ValueType.STRING; }
+		| realelementattr() )
+	{
+		return element;
+	}
+}
+
 EDFData elementnameandattr() : { EDFData element; String eName; }
 {
-  eName = elementname()
-  {
-  	element = new EDFData(eName);
-  }
-  	( <EQUALS> ( 
+	eName = elementname()
+	{
+		element = new EDFData(eName);
+	}
+	( <EQUALS> ( 
   		  element.iValue = intelementattr() { element.type = EDFData.ValueType.INTEGER; } 
   		| element.sValue = stringelementattr() { element.type = EDFData.ValueType.STRING; }
   		| realelementattr()
   	) )?
-  {
-  	return element;
-  }
+	{
+		return element;
+	}
 }
+
 String elementname() : { Token t; }
 {
-  t = <NAME> 						{ return t.image; }
+	t = <NAME>
+	{
+		return t.image;
+	}
 }
+
 int intelementattr() : { Token t; }
 {
-  t = <INTEGER>						{ return new Integer(t.image); }
+	t = <INTEGER>
+	{
+		return new Integer(t.image);
+	}
 }
+
 String stringelementattr() : { Token t; String s=""; }
 {
-  <QUOTE>
-  ( t = <STRING>	{ s = EDFData.unescape(t.image); } ) ?
-  <ENDQUOTE>						{ return s; }
+	<QUOTE> (
+		t = <STRING>
+		{
+			s = EDFData.unescape(t.image);
+		}
+	) ?
+	<ENDQUOTE>
+	{
+		return s;
+	}
 }
+
 // Ignore reals for now
-void realelementattr() : {}
+void realelementattr() : { }
 {
-  <REAL>
+	<REAL>
 }
