@@ -60,7 +60,7 @@ public class UAConnection implements Runnable {
 			EDFData inputedf;
 
 			// Loop round parsing the input
-			while (true) {
+			while (status == ConnectionStatus.CONNECTED) {
 				logger.trace("Status " + status);
 				inputedf = readEDF();
 				if (inputedf == null) {
@@ -243,6 +243,7 @@ public class UAConnection implements Runnable {
 			handleError(e);
 		}
 
+		logger.info("Null return, connection status " + status);
 		return null;
 	}
 
