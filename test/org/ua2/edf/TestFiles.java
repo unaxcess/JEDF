@@ -67,6 +67,10 @@ public class TestFiles extends TestCase {
 		parsePair("message_list2");
 	}
 
+	public void testMessageList3() throws IOException {
+		parsePair("message_list3");
+	}
+
 	public void testServiceList() throws IOException {
 		parsePair("service_list");
 	}
