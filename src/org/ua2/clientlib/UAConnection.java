@@ -105,8 +105,8 @@ public class UAConnection implements Runnable {
 							+ inputedf.format(true));
 				}
 			}
-			//
-			// This point not reached
+
+			logger.info("End of run");
 		} catch (Exception e) {
 			logger.error("Stopped loop due to error", e);
 		}
@@ -171,7 +171,9 @@ public class UAConnection implements Runnable {
 			logger.debug("Status: " + statusmessage);
 
 			// Fire up the reader thread
-			(new Thread(this)).start();
+			Thread thread = new Thread(this);
+			thread.setName("Reader-" + System.currentTimeMillis());
+			thread.start();
 		} catch (Exception e) {
 			setStatus(ConnectionStatus.CONNECTFAILED, e.getLocalizedMessage());
 

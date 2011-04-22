@@ -22,6 +22,7 @@ public class AnnounceQueue implements Runnable
 		announcementqueue.add(announcement);
 		
 		Thread queuerun = new Thread(this);
+		queuerun.setName("Announce" + System.currentTimeMillis());
 		queuerun.start();
 	}
 	
