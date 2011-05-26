@@ -1,4 +1,0 @@
-<announce="system_write">
-  <writetime=2/>
-  <announcetime=1290643113/>
-</announce>

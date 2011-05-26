@@ -1,7 +1,0 @@
-<announce="connection_open">
-  <connectionid=487/>
-  <timeon=1290643285/>
-  <location="Vodafone 3G"/>
-  <address="212.183.140.9"/>
-  <announcetime=1290643285/>
-</announce>

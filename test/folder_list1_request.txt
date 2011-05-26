@@ -1,3 +1,0 @@
-<request="folder_list">
-  <searchtype=2/>
-</request>

@@ -1,1 +1,0 @@
-<request="bulletin_list"/>

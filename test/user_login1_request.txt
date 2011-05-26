@@ -1,8 +1,0 @@
-<request="user_login">
-  <name="techno"/>
-  <password="si1verst0ne"/>
-  <client="qUAck v0.96g (Unix)"/>
-  <clientbase="qUAck"/>
-  <protocol="2.6-beta17"/>
-  <address="212.183.140.9"/>
-</request>
